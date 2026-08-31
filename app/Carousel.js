@@ -351,51 +351,20 @@ useEffect(() => {
     minDistance={8}
     maxDistance={12}
   />
-</Canvas>
+      </Canvas>
       </div>
 
-      <div
-        style={{
-          position: "fixed",
-          bottom: 20,
-          left: 0,
-          right: 0,
-          zIndex: 2,
-          textAlign: "center",
-          fontSize: "14px",
-          color: "#0100fc",
-          pointerEvents: "none",
-        }}
-      >
-        © Stanislas Millet
+      <div className="fixed bottom-5 inset-x-0 z-[2] flex flex-col items-center gap-1 sm:flex-row sm:justify-between sm:px-6">
+        <div className="text-sm text-[#0100fc]">
+          milletstanislas@gmail.com
+        </div>
+        <div className="text-sm text-[#0100fc] pointer-events-none">
+          © Stanislas Millet
+        </div>
+        <div className="text-sm text-[#0100fc] pointer-events-none">
+          ↑↓ images
+        </div>
       </div>
-
-      <div
-        style={{
-          position: "fixed",
-          bottom: 20,
-          right: 24,
-          zIndex: 2,
-          fontSize: "14px",
-          color: "#0100fc",
-          pointerEvents: "none",
-        }}
-      >
-        ↑↓ images
-      </div>
-
-      <div
-  style={{
-    position: "fixed",
-    bottom: 20,
-    left: 24,
-    zIndex: 2,
-    fontSize: "14px",
-    color: "#0100fc",
-  }}
->
-  milletstanislas@gmail.com
-</div>
     </div>
   );
 }
