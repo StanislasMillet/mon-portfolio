@@ -308,6 +308,9 @@ useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+  const nextBackground = () => {
+  setBgIndex((prev) => (prev + 1) % backgrounds.length);
+};
 
   const [initialRotation] = useState(() => {
     const total = projects.length;
@@ -361,9 +364,12 @@ useEffect(() => {
         <div className="text-sm text-[#0100fc] pointer-events-none">
           © Stanislas Millet
         </div>
-        <div className="text-sm text-[#0100fc] pointer-events-none">
-          ↑↓ images
-        </div>
+        <div
+  className="text-sm text-[#0100fc] cursor-pointer"
+  onClick={nextBackground}
+>
+  ↑↓ images
+</div>
       </div>
     </div>
   );
