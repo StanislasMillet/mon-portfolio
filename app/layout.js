@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Stanislas Millet — Portfolio",
-  description: "Portfolio interactif de Stanislas Millet, designer produit.",
+  description: "Portfolio interactif de Stanislas Millet, designer industriel",
 };
 export default function RootLayout({ children }) {
   return (
