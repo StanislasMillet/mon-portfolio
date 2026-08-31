@@ -383,6 +383,19 @@ useEffect(() => {
       >
         ↑↓ images
       </div>
+
+      <div
+  style={{
+    position: "fixed",
+    bottom: 20,
+    left: 24,
+    zIndex: 2,
+    fontSize: "14px",
+    color: "#0100fc",
+  }}
+>
+  milletstanislas@gmail.com
+</div>
     </div>
   );
 }
