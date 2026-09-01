@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import { DRACOLoader } from "three-stdlib";
 import { useThree } from "@react-three/fiber";
+import LoadingScreen from "./LoadingScreen";
 
 function ResponsiveCamera({ baseFov = 50 }) {
   const { camera, size } = useThree();
@@ -155,7 +156,7 @@ function Ring({ router }) {
           key="model-bench"
           position={[x, 0, z]}
           rotationY={angle}
-          path="/models/bench-texturedv2.glb"
+          path="/models/bench-texturedv3.glb"
           router={router}
           slug={projects[i].slug}
           scale={1.5}
@@ -320,57 +321,60 @@ useEffect(() => {
   });
 
   return (
-    <div style={{ width: "100%", height: "100vh", position: "relative", overflow: "hidden" }}>
-      <img
-        src={backgrounds[bgIndex]}
-        alt=""
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          zIndex: 0,
-          transition: "opacity 0.4s ease",
-        }}
-      />
-      <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-        <Canvas camera={{ position: [0, 1.5, 11], fov: 50 }} gl={{ alpha: true }}>
-  <ResponsiveCamera baseFov={50} baseAspect={16 / 9} />
-  <ambientLight intensity={1.5} />
-  <directionalLight position={[5, 5, 5]} intensity={0.8} />
-  <directionalLight position={[-5, 3, -5]} intensity={0.5} />
-  <Environment preset="warehouse" environmentIntensity={0.5} />
-  <Logo />
-  <CenterModel path="/models/north-star.glb" scale={10} />
-  <group rotation={[0, initialRotation, 0]}>
-    <Ring router={router} />
-  </group>
-  <OrbitControls
-    enableZoom={true}
-    enablePan={false}
-    minPolarAngle={Math.PI / 3}
-    maxPolarAngle={Math.PI / 1.7}
-    minDistance={8}
-    maxDistance={12}
-  />
-      </Canvas>
-      </div>
+    <>
+      <LoadingScreen />
+      <div style={{ width: "100%", height: "100vh", position: "relative", overflow: "hidden" }}>
+        <img
+          src={backgrounds[bgIndex]}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+            transition: "opacity 0.4s ease",
+          }}
+        />
+        <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+          <Canvas camera={{ position: [0, 1.5, 11], fov: 50 }} gl={{ alpha: true }}>
+            <ResponsiveCamera baseFov={50} baseAspect={16 / 9} />
+            <ambientLight intensity={1.5} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <directionalLight position={[-5, 3, -5]} intensity={0.5} />
+            <Environment preset="warehouse" environmentIntensity={0.5} />
+            <Logo />
+            <CenterModel path="/models/north-star.glb" scale={10} />
+            <group rotation={[0, initialRotation, 0]}>
+              <Ring router={router} />
+            </group>
+            <OrbitControls
+              enableZoom={true}
+              enablePan={false}
+              minPolarAngle={Math.PI / 3}
+              maxPolarAngle={Math.PI / 1.7}
+              minDistance={8}
+              maxDistance={12}
+            />
+          </Canvas>
+        </div>
 
-      <div className="fixed bottom-5 inset-x-0 z-[2] flex flex-col items-center gap-1 sm:flex-row sm:justify-between sm:px-6">
-        <div className="text-sm text-[#0100fc]">
-          milletstanislas@gmail.com
+        <div className="fixed bottom-5 inset-x-0 z-[2] flex flex-col items-center gap-1 sm:flex-row sm:justify-between sm:px-6">
+          <div className="text-sm text-[#0100fc]">
+            milletstanislas@gmail.com
+          </div>
+          <div className="text-sm text-[#0100fc] pointer-events-none">
+            © Stanislas Millet
+          </div>
+          <div
+            className="text-sm text-[#0100fc] cursor-pointer"
+            onClick={nextBackground}
+          >
+            ↑↓ images
+          </div>
         </div>
-        <div className="text-sm text-[#0100fc] pointer-events-none">
-          © Stanislas Millet
-        </div>
-        <div
-  className="text-sm text-[#0100fc] cursor-pointer"
-  onClick={nextBackground}
->
-  ↑↓ images
-</div>
       </div>
-    </div>
+    </>
   );
 }
