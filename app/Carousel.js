@@ -288,6 +288,10 @@ const backgrounds = [
   "/backgrounds/bg3.jpg",
   "/backgrounds/bg4.jpg",
   "/backgrounds/bg5.jpg",
+  "/backgrounds/bg6.jpg",
+  "/backgrounds/bg7.jpg",
+  "/backgrounds/bg8.jpg",
+  "/backgrounds/bg9.jpg",
 ];
 
 export default function Carousel() {
