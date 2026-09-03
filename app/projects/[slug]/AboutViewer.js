@@ -38,6 +38,16 @@ export default function AboutViewer({ project }) {
     View my resume
   </span>
 </a>
+<img
+  src="/moving-logo.png"
+  alt=""
+  className="fixed bottom-24 left-0 z-40 pointer-events-none"
+  style={{
+    width: 100,
+    height: "auto",
+    animation: "moveAcross 8s linear infinite",
+  }}
+/>
     </div>
   );
 }
