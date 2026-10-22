@@ -263,7 +263,22 @@ function Ring({ router }) {
           description="Contact CV info"
         />
       );
-    } else {
+    } else if (i === 8) {
+  items.push(
+    <Model
+      key="model-book"
+      position={[x, 0, z]}
+      rotationY={angle}
+      path="/models/book.glb"
+      router={router}
+      slug={projects[i].slug}
+      scale={5.5}
+      title="Library"
+      description="PDFs of books I enjoyed"
+    />
+  );
+} else {
+      
       items.push(
         <Card
           key={projects[i].id}

@@ -342,4 +342,12 @@ export const projects = [
   cvThumbnail: "/projects/about-me/cv-thumbnail.png",
   cvPdf: "/cv.pdf",
 },
+{
+  id: 9,
+  title: "Library",
+  slug: "library",
+  image: "/projects/projet9.jpg",
+  description: "...",
+  comingSoon: true,
+},
 ];

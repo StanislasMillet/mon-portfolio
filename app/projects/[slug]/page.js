@@ -1,8 +1,9 @@
 import { projects } from "../../data";
 import ProjectViewer from "./ProjectViewer";
 import Model3DViewer from "./Model3DViewer";
-import Link from "next/link";
 import AboutViewer from "./AboutViewer";
+import ComingSoonViewer from "./ComingSoonViewer";
+import Link from "next/link";
 
 export default async function ProjectPage({ params }) {
   const { slug } = await params;
@@ -15,12 +16,16 @@ export default async function ProjectPage({ params }) {
       </main>
     );
   }
-  
-  if (project.aboutVideo) {
-  return <AboutViewer project={project} />;
-}
 
-  if (project.models) {
+  if (project.comingSoon) {
+    return <ComingSoonViewer />;
+  }
+
+  if (project.aboutVideo) {
+    return <AboutViewer project={project} />;
+  }
+
+  if (project.model || project.models) {
     return <Model3DViewer project={project} />;
   }
 
