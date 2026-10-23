@@ -352,7 +352,7 @@ export const projects = [
     {
       path: "/models/library.glb",
       scale: 5,
-      title: "Library",
+      title: "",
     },
   ],
 },
