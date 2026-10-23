@@ -348,6 +348,12 @@ export const projects = [
   slug: "library",
   image: "/projects/projet9.jpg",
   description: "...",
-  comingSoon: true,
+  models: [
+    {
+      path: "/models/library.glb",
+      scale: 5,
+      title: "Library",
+    },
+  ],
 },
 ];

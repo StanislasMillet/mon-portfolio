@@ -120,17 +120,21 @@ export default function ProjectViewer({ project }) {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const startOffset = useRef(0);
+
+  const goNext = () => setLiveOffset((prev) => Math.round(prev) + 1);
+  const goPrev = () => setLiveOffset((prev) => Math.round(prev) - 1);
+
   useEffect(() => {
-  const handleKeyDown = (e) => {
-    if (e.key === "ArrowRight") {
-      setLiveOffset((prev) => Math.round(prev) + 1);
-    } else if (e.key === "ArrowLeft") {
-      setLiveOffset((prev) => Math.round(prev) - 1);
-    }
-  };
-  window.addEventListener("keydown", handleKeyDown);
-  return () => window.removeEventListener("keydown", handleKeyDown);
-}, []);
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowRight") {
+        setLiveOffset((prev) => Math.round(prev) + 1);
+      } else if (e.key === "ArrowLeft") {
+        setLiveOffset((prev) => Math.round(prev) - 1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleStart = (clientX) => {
     isDragging.current = true;
@@ -161,13 +165,13 @@ export default function ProjectViewer({ project }) {
       </Link>
 
       {project.logo && (
-  <Link
-    href="/"
-    className="fixed top-6 left-1/2 -translate-x-1/2 z-50 opacity-80 hover:opacity-100 transition-opacity"
-  >
-    <img src={project.logo} alt="Retour au carrousel" className="h-8 w-auto" />
-  </Link>
-)}
+        <Link
+          href="/"
+          className="fixed top-6 left-1/2 -translate-x-1/2 z-50 opacity-80 hover:opacity-100 transition-opacity"
+        >
+          <img src={project.logo} alt="Retour au carrousel" className="h-8 w-auto" />
+        </Link>
+      )}
 
       <div
         className="absolute inset-0"
@@ -178,17 +182,33 @@ export default function ProjectViewer({ project }) {
         onPointerLeave={handleEnd}
       >
         <Canvas camera={{ position: [0, 0, CAMERA_DISTANCE], fov: 50 }} flat>
-  <ResponsiveCamera baseFov={50} />
-  <Ring3D sections={sections} targetRotation={targetRotation} radius={RADIUS} />
-  <OrbitControls
-    enableRotate={false}
-    enablePan={false}
-    enableZoom={true}
-    minDistance={6}
-    maxDistance={CAMERA_DISTANCE + 4}
-  />
-</Canvas>
+          <ResponsiveCamera baseFov={50} />
+          <Ring3D sections={sections} targetRotation={targetRotation} radius={RADIUS} />
+          <OrbitControls
+            enableRotate={false}
+            enablePan={false}
+            enableZoom={true}
+            minDistance={6}
+            maxDistance={CAMERA_DISTANCE + 4}
+          />
+        </Canvas>
       </div>
+
+      <button
+        onClick={goPrev}
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-50 text-6xl text-[#0100fc] hover:text-[#ff6b35] transition-colors"
+        aria-label="Section précédente"
+      >
+        ‹
+      </button>
+
+      <button
+        onClick={goNext}
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-50 text-6xl text-[#0100fc] hover:text-[#ff6b35] transition-colors"
+        aria-label="Section suivante"
+      >
+        ›
+      </button>
     </div>
   );
 }
