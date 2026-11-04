@@ -10,6 +10,7 @@ import * as THREE from "three";
 import { DRACOLoader } from "three-stdlib";
 import { useThree } from "@react-three/fiber";
 import LoadingScreen from "./LoadingScreen";
+import BouncingLogo from "./BouncingLogo";
 
 function ResponsiveCamera({ baseFov = 50 }) {
   const { camera, size } = useThree();
@@ -385,13 +386,15 @@ useEffect(() => {
           <div className="text-sm text-[#0100fc] pointer-events-none">
             © Stanislas Millet
           </div>
-          <div
+                    <div
             className="text-sm text-[#0100fc] cursor-pointer"
             onClick={nextBackground}
           >
             ↑↓ images
           </div>
         </div>
+
+        <BouncingLogo />
       </div>
     </>
   );
