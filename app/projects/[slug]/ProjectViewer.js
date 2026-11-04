@@ -6,6 +6,7 @@ import { Canvas, useLoader, useFrame,useThree } from "@react-three/fiber";
 import { OrbitControls, Text } from "@react-three/drei";
 import { TextureLoader } from "three";
 import * as THREE from "three";
+import { parseGIF, decompressFrames } from "gifuct-js";
 
 
 const DRAG_SENSITIVITY = 300;
@@ -30,19 +31,83 @@ function ResponsiveCamera({ baseFov = 50 }) {
   return null;
 }
 
-function RingCard({ image, angle, title, text, video, radius }) {
-  const texture = useLoader(TextureLoader, image);
-  texture.colorSpace = THREE.SRGBColorSpace;
+function useGifTexture(url) {
+  const [texture, setTexture] = useState(null);
 
+  useEffect(() => {
+    let cancelled = false;
+    let rafId;
+    let tex;
+
+    (async () => {
+      const buffer = await fetch(url).then((r) => r.arrayBuffer());
+      if (cancelled) return;
+
+      const gif = parseGIF(buffer);
+      const frames = decompressFrames(gif, true);
+      const { width, height } = gif.lsd;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      const patchCanvas = document.createElement("canvas");
+      const patchCtx = patchCanvas.getContext("2d");
+
+      tex = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+
+      const draw = (frame) => {
+        const { dims, patch } = frame;
+        patchCanvas.width = dims.width;
+        patchCanvas.height = dims.height;
+        patchCtx.putImageData(new ImageData(patch, dims.width, dims.height), 0, 0);
+        ctx.drawImage(patchCanvas, dims.left, dims.top);
+        tex.needsUpdate = true;
+      };
+
+      let i = 0;
+      let last = performance.now();
+      draw(frames[0]);
+      setTexture(tex);
+
+      const tick = (now) => {
+        if (cancelled) return;
+        if (now - last >= (frames[i].delay || 100)) {
+          const prev = frames[i];
+          if (prev.disposalType === 2) {
+            ctx.clearRect(prev.dims.left, prev.dims.top, prev.dims.width, prev.dims.height);
+          }
+          i = (i + 1) % frames.length;
+          if (i === 0) ctx.clearRect(0, 0, width, height);
+          draw(frames[i]);
+          last = now;
+        }
+        rafId = requestAnimationFrame(tick);
+      };
+      rafId = requestAnimationFrame(tick);
+    })();
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafId);
+      if (tex) tex.dispose();
+    };
+  }, [url]);
+
+  return texture;
+}
+
+function CardMesh({ texture, angle, title, text, video, link, radius }) {
   const aspect = texture.image.width / texture.image.height;
   const height = CARD_HEIGHT;
   const width = height * aspect;
+  const target = video || link;
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (video) {
-      window.open(video, "_blank");
-    }
+    if (target) window.open(target, "_blank", "noopener,noreferrer");
   };
 
   const x = Math.sin(angle) * radius;
@@ -50,7 +115,11 @@ function RingCard({ image, angle, title, text, video, radius }) {
 
   return (
     <group position={[x, 0, z]} rotation={[0, angle, 0]}>
-      <mesh onClick={handleClick}>
+      <mesh
+        onClick={handleClick}
+        onPointerOver={() => target && (document.body.style.cursor = "pointer")}
+        onPointerOut={() => (document.body.style.cursor = "auto")}
+      >
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial map={texture} side={2} />
       </mesh>
@@ -80,6 +149,23 @@ function RingCard({ image, angle, title, text, video, radius }) {
   );
 }
 
+function StaticCard(props) {
+  const texture = useLoader(TextureLoader, props.image);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return <CardMesh texture={texture} {...props} />;
+}
+
+function GifCard(props) {
+  const texture = useGifTexture(props.image);
+  if (!texture) return null;
+  return <CardMesh texture={texture} {...props} />;
+}
+
+function RingCard(props) {
+  const isGif = props.image.toLowerCase().endsWith(".gif");
+  return isGif ? <GifCard {...props} /> : <StaticCard {...props} />;
+}
+
 function Ring3D({ sections, targetRotation, radius }) {
   const groupRef = useRef();
 
@@ -95,15 +181,16 @@ function Ring3D({ sections, targetRotation, radius }) {
   return (
     <group ref={groupRef}>
       {sections.map((section, i) => (
-        <RingCard
-          key={i}
-          image={section.image}
-          angle={i * anglePer}
-          title={section.title}
-          text={section.text}
-          video={section.video}
-          radius={radius}
-        />
+       <RingCard
+  key={i}
+  image={section.image}
+  angle={i * anglePer}
+  title={section.title}
+  text={section.text}
+  video={section.video}
+  link={section.link}
+  radius={radius}
+/>
       ))}
     </group>
   );

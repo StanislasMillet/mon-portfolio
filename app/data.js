@@ -72,6 +72,12 @@ export const projects = [
     text: "Click on it ",
     video: "/projects/teenage-engineering-alarm/alarm-demo.mp4",
   },
+    {
+    image: "/projects/teenage-engineering-alarm/alarm-circuit.gif",
+    title: "Electronics prototype",
+    text: "Click to open the interactive simulation on Wokwi",
+    link: "https://wokwi.com/projects/479132074311596033",
+  },
 ],
 },
   {

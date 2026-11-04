@@ -204,7 +204,7 @@ function Ring({ router }) {
           slug={projects[i].slug}
           scale={8}
           title="Desktop Holder"
-          description="Professional project for Studio Raphaël Lutz to hold pencils and desk accessories"
+          description="Professional project for Studio Raphaël Lutz to hold pencils and accessories"
         />
       );
     } else if (i === 4) {
@@ -218,7 +218,7 @@ function Ring({ router }) {
           slug={projects[i].slug}
           scale={2.5}
           title="Furniture Font Exploration"
-          description="Metal furniture imagined on the basis of a font created by Awista Montagne"
+          description="Metal furniture based on a font created by Awista Montagne"
         />
       );
     } else if (i === 5) {
